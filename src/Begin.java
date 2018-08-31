@@ -1,61 +1,73 @@
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Begin {
 
-	public static void main(String[] args) throws InterruptedException {
-		System.out.println(".....world in 2050");
+	public static void main(String[] args) throws IOException {
+		System.out.println("....world in 2050");
 		System.out.println();
-		
-		Terminator t = new Terminator();
-		Human h = new Human();
-		//Human h2 = new Human();
-		
-		h.dead(t.weapon);
-		t.dead(h.weapon);
-		
-		//РАЗРАБОТАТЬ СОБЫТИЕ КОНТАКТ!!!!
-		
-		//...here we add in this world action)
-//		Action act = new Action();
-//		act.fight(t.life, t.weapon, h.life, h.weapon);
-		
-		//FIGHT???
-//		while(t.life > 0 && h.life > 0){
-//			t.life = t.life - h.weapon;
-//			h.life = h.life - t.weapon;
-//			
-//			System.out.println("fight");
-//			System.out.println("t = "+t.life);
-//			System.out.println("h = "+h.life);
-//		}
-		
-		System.out.println(h.life);
-		Human h2 = new Human();
-		System.out.println(h2.life);
-		System.out.println(h.life);
-		System.out.println(t.life);
-		System.out.println(t.kind);
-	
-		
-		System.out.println("Array");
-		ArrayList lot = new ArrayList();
-		
-		
-			lot.add(h);
-			lot.add(h2);
-			//lot.add(t);
-			Human h5 = new Human();
-			for(int i = 0; i < lot.size(); i++){
-				System.out.println(lot.get(i));
-				System.out.println();
-				h5 = (Human) lot.get(i);
-				System.out.println("probe: " + h5.life);
-				System.out.println("probe: " + h5.kind);
-				
-			}
-			lot.get(0);
-			
-		
+		//MENU
+		 BufferedReader choice = new BufferedReader(new InputStreamReader(System.in));
+		 String s = "";
+		 
+		 Unit human = new Unit(50,10,"human");
+		 Unit terminator = new Unit(100,20,"terminator");
+		 int count = 1;
+		 
+// ..MAIN STREAM	 
+		 while(!s.equals("exit")){
+			 System.out.println();
+			 System.out.println();
+			 System.out.println("begin-------------" + count + "------------------");
+			 System.out.println("..main menu:");
+			 System.out.println("command - begin fight");
+			 System.out.println("command - exit from program");
+			 System.out.println("Your command is: " + s);
+			 System.out.println();
+			 s = choice.readLine();
+			 System.out.println("....result");
+			 System.out.println("---------------------------------end");
+			 count++;
+			 
+			 
+//***	ВЗАИМОДЕЙСТВИЕ!!!
+//		НАБОР УСЛОВИЙ
+			 	if(s.equals("begin fight")){
+			 		System.out.println("..fight begin");
+			 			
+			 			while(!s.equals("finish fight")){
+			 				System.out.println("fight, first bum");
+			 				
+			 				
+//АЛГОРИТМ ВЗАИМОДЕЙСТВИЯ			 				
+			 				human.dead(terminator.weapon);
+			 				terminator.dead(human.weapon);
+			 				
+			 				System.out.println("human life: " + human.life);
+			 				System.out.println("terminator life: " + terminator.life);
+			 				
+			 				
+			 				
+			 				if(human.life <= 0) {
+			 					System.out.println("human is dead");break;
+			 				}
+			 				if(terminator.life <= 0){
+			 					System.out.println("terminator is dead");break;
+			 				}
+			 				s = choice.readLine();
+			 				System.out.println(s);
+			 				if(s.equals("finish fight"))break;
+			 				
+			 			}
+			 	}	
+//..END MAIN STREAM
+			 }
+		 
+		 // ...PART N
+		 System.out.println();
+		 System.out.println("....total end");
+
 	}
 
 }
