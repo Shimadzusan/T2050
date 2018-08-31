@@ -40,7 +40,7 @@ public class Begin {
 			 				System.out.println("fight, first bum");
 			 				
 			 				
-//АЛГОРИТМ ВЗАИМОДЕЙСТВИЯ			 				
+//АЛГОРИТМ ВЗАИМОДЕЙСТВИЯ///////////////////////////////////////////////////////////////////////			 				
 			 				human.dead(terminator.weapon);
 			 				terminator.dead(human.weapon);
 			 				
