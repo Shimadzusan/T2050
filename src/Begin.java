@@ -1,18 +1,34 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class Begin {
 
 	public static void main(String[] args) throws IOException {
+		new Field();
+		//System.out.println("Hello");
+		/*
 		System.out.println("....world in 2050");
 		System.out.println();
 		//MENU
 		 BufferedReader choice = new BufferedReader(new InputStreamReader(System.in));
 		 String s = "";
+		 String ss = "human2";
 		 
-		 Unit human = new Unit(50,10,"human");
-		 Unit terminator = new Unit(100,20,"terminator");
+		 Unit human = new Unit(0,10,"human");
+		 Unit human2 = new Unit(50,10,"human");
+		 Unit terminator = new Unit(0,20,"terminator");
+		 Unit terminator2 = new Unit(90,20,"terminator");
+		 
+		 ArrayList list = new ArrayList();
+			 list.add(human);
+			 list.add(human2);
+			 list.add(terminator);
+			 list.add(terminator2);
+			 
+			 
+		 
 		 int count = 1;
 		 boolean contact = false;
 		 
@@ -23,8 +39,9 @@ public class Begin {
 			 System.out.println("begin-------------" + count + "------------------");
 			 //SYSTEM STATUS
 			 System.out.println("..system status:");
-			 system_status(human);
-			 system_status(terminator);
+			 system_status(human, human2, terminator, terminator2);
+			 mass(list);
+			 
 			 System.out.println("contact status: " + contact);
 			 System.out.println("****");
 			 //MAIN MENU
@@ -35,6 +52,7 @@ public class Begin {
 			 System.out.println("command - delete terminator");
 			 
 			 System.out.println("command - launch contact");
+			 System.out.println("command - stop contact");
 			 System.out.println("command - begin fight");
 			 System.out.println("command - exit from program");
 			 System.out.println("Entere Your command is:");
@@ -76,6 +94,9 @@ public class Begin {
 			 				
 			 			}
 			 	}
+			 	else{
+			 		if(s.equals("begin fight")) System.out.println("..contact status is false");
+			 	}
 //***	ВЗАИМОДЕЙСТВИЕ!!!
 //				НАБОР УСЛОВИЙ FOR CREATE AND DELETE!!!
 			 	if(s.equals("create human")){
@@ -103,15 +124,42 @@ public class Begin {
 			 	}
 //..END MAIN STREAM
 			 }
-		 
+		
 		 // ...PART N
 		 System.out.println();
 		 System.out.println("....total end");
 
 	}
-	public static void system_status(Unit human){
+	public static void system_status(Unit unit1, Unit unit2, Unit unit3, Unit unit4){
 		//System.out.println("..system status:");
-		System.out.println(human.kind + " life: " + human.life);
+		System.out.println(unit1.kind + " life: " + unit1.life);
+		//System.out.println(list.);
+		
+		
+	}
+	
+	
+	public static void mass(ArrayList mass){
+		Unit unitx = new Unit(0,0,"");
+		int h = 0;
+		int t = 0;
+		String s = "";
+		for(int i = 0; i < mass.size(); i++){
+			
+			unitx = (Unit) mass.get(i);
+			System.out.println(unitx.kind + " life: " + unitx.life);
+			s = unitx.kind;
+			if(s.equals("human") && unitx.life > 0) h++;
+			if(s.equals("terminator") && unitx.life > 0) t++;
+			
+			
+		}
+			System.out.println();
+			System.out.println("total");
+			System.out.println("human: " + h + " st.");
+			System.out.println("terminator: " + t + " st.");
+	
+	*/
 	}
 
 }
