@@ -6,7 +6,9 @@ import java.util.ArrayList;
 public class Begin {
 
 	public static void main(String[] args) throws IOException {
+		
 		new Field();
+		
 		//System.out.println("Hello");
 		/*
 		System.out.println("....world in 2050");
