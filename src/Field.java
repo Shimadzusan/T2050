@@ -49,6 +49,7 @@ public class Field {
 			 
 		System.out.println();
 		System.out.println("....total end");
+		
 		 }
 	
 

@@ -1,10 +1,10 @@
+package Version_two;
 
 public class Unit {
 	int life;
 	int weapon;
 	boolean dead;
 	String kind; //special kind
-	float space = 0;
 	
 	Unit(int life, int weapon, String kind){
 		
