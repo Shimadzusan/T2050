@@ -27,19 +27,23 @@ import javax.swing.text.JTextComponent;
  * Выделять память сразу для всех объектов, или выделяем память в процессе работы программы при создании объектов
  */
 public class Basis extends JFrame {
+	/*
+	 * Данный класс отвечает за формирование окна вывода основных параметров
+	 * Так как вывод основных параметров в консоль по техническим причинам не возможен
+	 * приходится пользоваться именно такой реализацией
+	 * Класс так же содержит метод main  и запускает класс с основной логикой(Control)
+	 */
 	
 	 static JPanel panel = new JPanel();
-	 
-	 static  JLabel lbl = new JLabel();
-	 static  JLabel lbl2 = new JLabel();
-	 static  JLabel lbl3 = new JLabel("system_status:");
-	 static  JLabel lbl4 = new JLabel("system_time:");
-	 static  JLabel lbl5 = new JLabel();
-	 static  JLabel lbl6 = new JLabel();
-	 static  JLabel label_fight = new JLabel();
-	 static int i = 0;    
-
-///////////////////////////////////////////////////////////////////////////
+//переменные для вывода основных параметров на фрейм	 
+		 static  JLabel lbl = new JLabel();
+		 static  JLabel lbl2 = new JLabel();
+		 static  JLabel lbl3 = new JLabel("system_status:");
+		 static  JLabel lbl4 = new JLabel("system_time:");
+		 static  JLabel lbl5 = new JLabel();
+		 static  JLabel lbl6 = new JLabel();
+		 static  JLabel label_fight = new JLabel();
+		 static int i = 0;    
 
 	public Basis(){
         setTitle("# main frame of control #");
@@ -47,17 +51,15 @@ public class Basis extends JFrame {
         setSize(450,345);
         setLocation(400,400);
         setVisible(true);
-       
-		
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
-    	Basis fr = new Basis();
+    	Basis frame = new Basis();
         
 	        panel.setBackground(Color.LIGHT_GRAY);
 	        panel.setLayout(null);
-	        fr.add(panel);
-        
+	        frame.add(panel);
+//расположение надписей с выводом основных параметров
 	        	lbl.setBounds(10, 25, 350, 40);
 	        	lbl2.setBounds(10, 45, 350, 40);
 	        	lbl3.setBounds(10, 5, 150, 40);
@@ -77,15 +79,14 @@ public class Basis extends JFrame {
 	        	panel.add(lbl6);
 	        	
 	        	panel.add(label_fight);
-	        	
-             
+//===================================================
 	        		new Control();
-        
     }
  
 }
 
-class Control implements Runnable{
+class Control implements Runnable {
+	
 	static boolean flag_a = false;
 	static int count_a = 1;
 	static int object_class_a = 0;
@@ -95,102 +96,81 @@ class Control implements Runnable{
 	static int object_class_b = 0;
 	
 	static boolean flag_fight = false;
-	
-	Unit x = new Unit(0,0,"");
+//эта группа юнитов предназначена для ... операций	
+		Unit x = new Unit(0,0,"");
 		Unit z = new Unit(0,0,"");
-	static ArrayList<Unit> lot_of_units = new ArrayList<Unit>();
-	
-	Control() throws InterruptedException, IOException {
 		
+	static ArrayList<Unit> lot_of_units = new ArrayList<Unit>();
+//=====================================================
+//BLOCK OF MY CONTROL
+	Control() throws InterruptedException, IOException {
+//...формируем список юнитов
 		Unit u1 = new Unit(0,0,"");
 		Unit u2 = new Unit(0,0,"");
-		
-		
 		
 		lot_of_units.add(u1);
 		lot_of_units.add(u2);
 
-		String s = "";
+		String command = "";
 		
-		while(true){
-			
-			System.out.println();
+	while(true){
+
+			System.out.println();//Интерфейс для командной строки
 			System.out.println("==========BLOCK OF CONTROL==========");
 			System.out.println("..availabel command: run; stop; exit");
-			
 			System.out.println("..system status: object_class_a = " + object_class_a + "; object_class_b = " + object_class_b);
 					
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-			 s = bufferedReader.readLine(); //читаем строку с клавиатуры
+			command = bufferedReader.readLine(); //читаем строку с клавиатуры
 			
-			 
-			if(s.equals("exit"))break;
-//			
-			if(s.equals("run -a")){
-				Thread t = new Thread(this);
+		if(command.equals("exit"))break;
+		
+		if(command.equals("run -a")){
+			Thread t = new Thread(this);
 				t.start();
-				flag_a = true;
-			}
-			
-			if(s.equals("stop -a"))flag_a = false;
-	//--------------------------B--------------------------
-			
-			if(s.equals("run -b")){
-				Thread b = new Thread(new Process_b());
-				b.start();
-				flag_b = true;
-			
-			}
-			
-			if(s.equals("stop -b"))flag_b = false;
-			
-//----------------thread system_status----------------------
-			
+					flag_a = true;
+		}	
+		if(command.equals("stop -a"))flag_a = false;
 //--------------------------B--------------------------
 			
-			if(s.equals("run -status")){
-				Thread status = new Thread(new System_status());
+		if(command.equals("run -b")){
+			Thread b = new Thread(new Process_b());
+				b.start();
+					flag_b = true;
+		}
+		if(command.equals("stop -b"))flag_b = false;
+//----------------thread system_status----------------------
+
+		if(command.equals("run -status")){
+			Thread status = new Thread(new System_status());
 				status.start();
 				//flag_b = true;
+		}
 			
-			}
-			
-	//		if(s.equals("stop -status"));//flag_b = false;
-			
-//-------------------------C----------------------------
-//	//----------------------C----------------------------
-//			if(s.equals("run -c")){
-//				Thread c = new Thread(new Process_c());
-//				c.start();
-//				
-//			}
-				
-//------------------------------------------------------------
-				if(s.equals("create -h")){
-					create_human();
-				}
-			if(s.equals("delete -h"))delete_human();
-			
+//		if(s.equals("stop -status"));//flag_b = false;		
+//------------------OPERATION WITH UNITS--------------------
+		if(command.equals("create -h")){
+			create_human();
+		}
+		if(command.equals("delete -h"))delete_human();	
 //----------------------fight-------------------------------
-			if(s.equals("fight")){
-				Thread fight = new Thread(new Fight());
+		
+		if(command.equals("fight")){
+			Thread fight = new Thread(new Fight());
 				fight.start();
-				flag_fight = true;
-			
-			}
-			
-			if(s.equals("stop fight"))flag_fight = false;
+					flag_fight = true;
+		}
+		if(command.equals("stop fight"))flag_fight = false;
 //----------------------------------------------------------
-			System.out.println(s);
+			System.out.println("you command is: " + command);
 			System.out.println("================END=================");
-
 		}
 	}
 
 	@Override
 	public void run() {
-	try {
-			
+		try {
+//...простой процесс класса А	
 			while(flag_a == true){
 			Thread.sleep(5000);
 			Basis.lbl.setText("Execution Process kind -a   ...stage " + Control.count_a + " run is: " + flag_a);
@@ -215,55 +195,37 @@ class Control implements Runnable{
 			
 			for(int i = 0; i < lot_of_units.size(); i++){
 				 x = lot_of_units.get(i);
-				 System.out.println(flag + "" + i);
-//				 System.out.println("+++++++++++++++++");
-//				 system_status();
-//				 System.out.println("+++++++++++++++++");
-				 //System.out.println("Unit: " + x.kind + " life: " + x.life + " weapon: " + x.weapon);
+
 				 if(!x.kind.equals("human") && !x.kind.equals("terminator") && flag == true){
 					 z = x;
-					 z.kind = "human";
-						z.life = 50;
-						z.weapon = 10;
-						lot_of_units.set(i, z);
-						flag = false;
-						//total_human = total_human + 1;
-						System.out.println(flag + "" + i);
+					 	z.kind = "human";
+					 		z.life = 50;
+					 			z.weapon = 10;
+					 				lot_of_units.set(i, z);
+					 					flag = false;
 				 }
-			 }
-				
-			}
+			 }			
+	}
 
-		private void delete_human() {
+	private void delete_human() {
 		boolean flag = true;
 			
 			for(int i = 0; i < lot_of_units.size(); i++){
 				 x = (Unit) lot_of_units.get(i);
-				 System.out.println(flag + "" + i);
-//				 System.out.println("+++++++++++++++++");
-//				 system_status();
-//				 System.out.println("+++++++++++++++++");
+				 
 				 if(x.kind.equals("human") && flag ==true){
 					 z = x;
-					 z.kind = "";
-						z.life = 0;
-						z.weapon = 0;
-						lot_of_units.set(i, z);
-						flag = false;
-						//total_human = total_human - 1;
-						System.out.println(flag + "" + i);
-					 
+					 	z.kind = "";
+					 		z.life = 0;
+					 			z.weapon = 0;
+					 				lot_of_units.set(i, z);
+					 					flag = false;
 				 }
 			}
+	}
 
-
-
-	
 }
-//		public void fight(){
-//			System.out.println("I am abs!!!");
-//		}
-}
+
 class Process_b implements Runnable{
 
 	@Override
@@ -311,8 +273,9 @@ class Fight implements Runnable{
 					u = Control.lot_of_units.get(i);
 						if(u.kind.equals("human")) {
 						u.life -= 5;
-							Control.lot_of_units.set(0, u);
+							Control.lot_of_units.set(i, u);
 							break;
+							//WE NEED BOOL VAR SWITCH
 						}
 				}
 							
