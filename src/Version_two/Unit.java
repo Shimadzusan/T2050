@@ -4,13 +4,15 @@ public class Unit {
 	int life;
 	int weapon;
 	boolean dead;
-	String kind; //special kind
+	String ideology; //special kind of unit
+	int location; //диапазон от 0 до 100 (условно)
 	
-	Unit(int life, int weapon, String kind){
+	Unit(int life, int weapon, String ideology, int location){
 		
 		this.life = life;
 		this.weapon = weapon;
-		this.kind = kind;
+		this.ideology = ideology;
+		this.location = location;
 	}
 	
 	public void dead(int weapon){
