@@ -40,6 +40,8 @@ public class Basis extends JFrame {
 		 static  JLabel lbl2 = new JLabel();
 		 static  JLabel lbl3 = new JLabel("system_status:");
 		 static  JLabel lbl4 = new JLabel("system_time:");
+		 static  JLabel lbl5 = new JLabel();
+		 static  JLabel lbl6 = new JLabel();
 		 static  JLabel unit1 = new JLabel();
 		 static  JLabel unit2 = new JLabel();
 		 static  JLabel unit3 = new JLabel();
@@ -67,6 +69,9 @@ public class Basis extends JFrame {
 	        	lbl3.setBounds(10, 5, 150, 40);
 	        	lbl4.setBounds(350, 5, 150, 40);
 	        	
+	        	lbl5.setBounds(350, 25, 350, 40);
+	        	lbl6.setBounds(350, 45, 350, 40);
+	        	
 	        	unit1.setBounds(10, 65, 350, 40);
 	        	unit2.setBounds(10, 85, 350, 40);
 	        	unit3.setBounds(10, 105, 350, 40);
@@ -78,6 +83,9 @@ public class Basis extends JFrame {
 	        	panel.add(lbl2);
 	        	panel.add(lbl3);
 	        	panel.add(lbl4);
+	        	
+	        	panel.add(lbl5);
+	        	panel.add(lbl6);
 	        	
 	        	panel.add(unit1);
 	        	panel.add(unit2);
@@ -114,8 +122,8 @@ class Control implements Runnable {
 //...формируем список юнитов
 		Unit u1 = new Unit(60,10,"human",0);
 		Unit u2 = new Unit(80,20,"terminator",50);
-		Unit u3 = new Unit(0,0,"",0);
-		Unit u4 = new Unit(0,0,"",0);
+		Unit u3 = new Unit(50,10,"human",10);
+		Unit u4 = new Unit(90,15,"terminator",40);
 		
 		lot_of_units.add(u1);
 		lot_of_units.add(u2);
@@ -184,6 +192,8 @@ class Control implements Runnable {
 //----------------------------------------------------------
 			System.out.println("you command is: " + command);
 			System.out.println("================END=================");
+			
+			Basis.lbl5.setText("|===================================");
 		}
 	}
 
@@ -345,81 +355,172 @@ class Process_b implements Runnable{
 class Fight implements Runnable{
 	
 	Unit unit_u = new Unit(0, 0, "",0);
+	Unit unit_v = new Unit(0, 0, "",0);
 	
 	@Override
 	public void run() {
+		int omega = 1;
 			System.out.println("fight");
 		try {
 			while(Control.flag_fight == true){
 				Thread.sleep(3000);//MUST TO END REPLACE!
 				Basis.label_fight.setText("fight   ...state " + Control.flag_fight);
+				Basis.lbl.setText("..cycle of fight   ...stage " + omega);
+				
+				//System.out.println("cycle of fight " + omega);
+				omega++;
+			
+				
+//		for(int i = 0; i < Control.lot_of_units.size(); i++) {
+//					
+//					unit_u = Control.lot_of_units.get(i);
+//						unit_u.life -= 1;
+//						
+//						Control.lot_of_units.set(i, unit_u);
+//			}			
+		
+			
 //===ЛОГИКА БОЯ===
 	ArrayList<Unit> list_human = new ArrayList<Unit>();
 	ArrayList<Unit> list_terminator = new ArrayList<Unit>();
 	ArrayList<Unit> new_lot_units = new ArrayList<Unit>();
+	ArrayList<Unit> empty = new ArrayList<Unit>();
 	
 	for(int i = 0; i < Control.lot_of_units.size(); i++) {
 		
 			unit_u = Control.lot_of_units.get(i);
 				if(unit_u.ideology.equals("human"))list_human.add(unit_u);
 				if(unit_u.ideology.equals("terminator"))list_terminator.add(unit_u);
+				if(!unit_u.ideology.equals("terminator") && !unit_u.ideology.equals("human"))empty.add(unit_u);
 	}
+	
+	Basis.lbl2.setText("human " + list_human.size() + " terminator " + list_terminator.size() + " other " + empty.size());
+	
+	
+	
 //===SEARCH CONTACT!! список законтаченных юнитов
 				
 	ArrayList<Unit> contact_h = new ArrayList<Unit>();
 	ArrayList<Unit> contact_t = new ArrayList<Unit>();
+	
 		for(int k = 0; k < list_human.size(); k++) {
-			unit_u = list_human.get(k);
-				int dist_h = unit_u.location;
+			unit_v = list_human.get(k);
+				int dist_h = unit_v.location;
+				int result = 0;
 				
 					for(int j = 0; j < list_terminator.size(); j++) {
 						unit_u = list_terminator.get(j);
 							int dist_t = unit_u.location;
 
-								int result = dist_h - dist_t;
+								 result = dist_h - dist_t;
 							
 									if(result <= 3 && result >= -3) {
-										contact_t.add(unit_u);
+										contact_h.add(unit_v);
+										break;
 									}
-									else {
-										new_lot_units.add(unit_u);
-									}
+//При итерации добавляются лишние юниты, в обоих вариантах!!
+//									
+//									else {
+//										new_lot_units.add(unit_u);
+//									}
+					}
+					if(result > 3 || result < -3) {
+						new_lot_units.add(unit_v);
 					}
 					
 		}
 		
-		for(int j = 0; j < contact_t.size(); j++) {
-			unit_u = contact_t.get(j);
-				int dist_t = unit_u.location;
-				
+		for(int j = 0; j < list_terminator.size(); j++) {
+			unit_v = list_terminator.get(j);
+				int dist_t = unit_v.location;
+				int result = 0;
 					for(int l = 0; l < list_human.size(); l++) {
 						unit_u = list_human.get(l);
 							int dist_h = unit_u.location;
 							
-								int result = dist_h - dist_t;
+								result = dist_h - dist_t;
 							
 									if(result <= 3 && result >= -3) {
-										contact_h.add(unit_u);
+										contact_t.add(unit_v);
+										break;
 									}
-									else {
-										new_lot_units.add(unit_u);
-									}
+//									else {
+//										new_lot_units.add(unit_u);
+//									}
+					}
+					
+					if(result > 3 || result < -3) {
+						new_lot_units.add(unit_v);
 					}
 		}
+Basis.lbl6.setText("searh contact: contact_h = " + contact_h.size() + " contact_t = " + contact_t.size() + " contact_zero = " + new_lot_units.size());
+//=========================
 		
-		int total_weapon_power_t = 20 * (contact_t.size() + 1);
-		int total_weapon_power_h = 10 * (contact_h.size() + 1);
 		
+		int total_weapon_power_t = 20 * contact_t.size();
+		int total_weapon_power_h = 10 * contact_h.size();
+		
+		if(contact_h.size() > 0){
 		unit_u = contact_h.get(0);
 			unit_u.life -= total_weapon_power_t;
 				contact_h.set(0, unit_u);
-				
+		}
+		
+		if(contact_t.size() > 0) {
 		unit_u = contact_t.get(0);
 			unit_u.life -= total_weapon_power_h;
 				contact_t.set(0, unit_u);
-
+		}
 //ФОРМИРУЕМ КОНЕЧНЫЙ РЕЗУЛЬТАТ ИЗ ТРЕХ МАССИВОВ
-			
+				
+				int m = 0;
+					
+					if(contact_h.size() > 0){
+						
+						for(int p = 0; p < contact_h.size(); p++) {
+							Control.lot_of_units.set(p, contact_h.get(p));
+							m++;
+						}
+						
+					}
+//----------------------------------------------------------2
+					
+					if(contact_t.size() > 0){
+						
+						for(int p = 0; p < contact_t.size(); p++) {
+							Control.lot_of_units.set(m, contact_t.get(p));
+							m++;
+						}
+					}
+
+//----------------------------------------------------------3
+					
+					if(new_lot_units.size() > 0){
+						
+						for(int p = 0; p < new_lot_units.size(); p++) {
+							Control.lot_of_units.set(m, new_lot_units.get(p));
+							m++;
+						}
+					}
+					
+
+//----------------------------------------------------------4
+					
+					if(empty.size() > 0){
+						
+						for(int p = 0; p < empty.size(); p++) {
+							Control.lot_of_units.set(m, empty.get(p));
+							m++;
+						}
+					}
+					
+
+
+	
+				
+				
+				
+				/*		
 				for(int m = 0; m < Control.lot_of_units.size(); m++) {
 					Control.lot_of_units.remove(m);
 				}
@@ -434,7 +535,9 @@ class Fight implements Runnable{
 	for(int n = 0; n < new_lot_units.size(); n++) {
 		Control.lot_of_units.add(new_lot_units.get(n));
 	}
-	
+//END BATTLE MODUL
+	*/
+				
 //	Control.lot_of_units = new_lot_units + contact_t;
 				//First.lbl.setText("complete: " + Control.count_b + "%");
 				//System.out.println("Execution Process kind -b   ...stage " + Control.count_b);
@@ -460,6 +563,14 @@ class Fight implements Runnable{
 		}
 		
 	}
+//	ArrayList<Unit> add_list (ArrayList<Unit> first, ArrayList<Unit> second) {
+//		
+//		for(int i = 0; i < first.size(); i++) {
+//			first
+//		}
+//		
+//		return first;
+//	}
 	
 }
 
@@ -484,7 +595,7 @@ class System_status implements Runnable{
 				time++;
 				//! проверка всех систем, то есть раз в секунду
 				get_parametrs();
-				//set_parametrs();
+				set_parametrs();
 //===FIGHT!!!			
 				run_fight();
 				
@@ -516,26 +627,30 @@ class System_status implements Runnable{
 	}
 	
 	void set_parametrs() {
-		unit_x = Control.lot_of_units.get(0);
+		
+		for(int i = 0; i < Control.lot_of_units.size(); i++) {
+		unit_x = Control.lot_of_units.get(i);
+	
 //		System.out.println("Unit: " + x.kind + " life: " + x.life + " weapon: " + x.weapon);
 		if(unit_x.life <= 0){
 
 boolean flag = true;
 			
-							 if(unit_x.ideology.equals("human") && flag ==true){
+						if(unit_x.ideology.equals("human") || unit_x.ideology.equals("terminator") && flag ==true){
 					 unit_z = unit_x;
 					 unit_z.ideology = "";
 					 unit_z.life = 0;
 					 unit_z.weapon = 0;
 					 unit_z.location = 0;
-						Control.lot_of_units.set(0, unit_z);
+						Control.lot_of_units.set(i, unit_z);
 						flag = false;
 						//total_human = total_human - 1;
-						System.out.println(flag + "" + 0);
+					//	System.out.println(flag + "" + 0);
 					 
 				 }
 		}
-			
+		
+		}		
 	}
 	
 	void run_fight() {
@@ -557,27 +672,50 @@ boolean flag = true;
 	if(human_dist.size() > 0 && terminator_dist.size() > 0) {
 		int h_dist = 0;
 		int t_dist = 0;
-		int result = 100;
+		int[] result = new int[human_dist.size() * terminator_dist.size()];
+		boolean contact = false;
+		int r = 0;
 		
 			for(int i =0; i < human_dist.size(); i++) {
 				h_dist = human_dist.get(i);
 				
 				for(int k = 0; k < terminator_dist.size(); k++) {
 					t_dist = terminator_dist.get(k);
-						result = h_dist - t_dist;
+						result[r] = h_dist - t_dist;
+						r++;
 						
-							if(result <= 3 && result >= -3 && Control.flag_fight == false) {
-								Control.flag_fight = true;
-									Thread fight = new Thread(new Fight());
-										fight.start();
-System.out.println("in first" + result);
-//								Control.switch_fight = true;
-							}
-							if((result >= 4 || result <= -4) && Control.flag_fight == true) {
-System.out.println("in second" + result);
-								Control.flag_fight = false;
-							}
+//						
+//							if(result <= 3 && result >= -3 && Control.flag_fight == false) {
+//								Control.flag_fight = true;
+//									Thread fight = new Thread(new Fight());
+//										fight.start();
+//System.out.println("in first" + result);
+////								Control.switch_fight = true;
+//							}
+//							if((result >= 4 || result <= -4) && Control.flag_fight == true) {
+//System.out.println("in second" + result);
+//								Control.flag_fight = false;
+//							}
 				}
+			}
+
+			for(int i = 0; i < result.length; i++) {
+				//System.out.println(result[i] + " " + i);
+				if(result[i] <= 3 && result[i] >= -3) {
+					
+					contact = true;}
+			}
+			
+			if(contact ==true && Control.flag_fight == false) {
+				Control.flag_fight = true;
+					Thread fight = new Thread(new Fight());
+						fight.start();
+//System.out.println("in first" + result);
+//				Control.switch_fight = true;
+			}
+			if(contact == false && Control.flag_fight == true) {
+//System.out.println("in second" + result);
+				Control.flag_fight = false;
 			}
 	}
 		
