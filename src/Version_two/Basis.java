@@ -151,13 +151,13 @@ class Control implements Runnable {
 		}	
 		if(command.equals("stop -a"))flag_a = false;
 //--------------------------B--------------------------
-			
-		if(command.equals("run -b")){
-			Thread b = new Thread(new Process_b());
-				b.start();
-					flag_b = true;
-		}
-		if(command.equals("stop -b"))flag_b = false;
+//			
+//		if(command.equals("run -b")){
+//			Thread b = new Thread(new Process_b());
+//				b.start();
+//					flag_b = true;
+//		}
+//		if(command.equals("stop -b"))flag_b = false;
 //----------------thread system_status----------------------
 
 		if(command.equals("run -status")){
@@ -199,24 +199,24 @@ class Control implements Runnable {
 
 	@Override
 	public void run() {
-		try {
-//...простой процесс класса А	
-			while(flag_a == true){
-			Thread.sleep(5000);
-			Basis.lbl.setText("Execution Process kind -a   ...stage " + Control.count_a + " run is: " + flag_a);
-			//System.out.println("Execution Process kind -a   ...stage " + count);
-			count_a++;
-			if(count_a > 5)count_a = 1;
-			
-			object_class_a += - 2; 
-			}
+//		try {
+////...простой процесс класса А	
+//			while(flag_a == true){
+//			Thread.sleep(5000);
+//			Basis.lbl.setText("Execution Process kind -a   ...stage " + Control.count_a + " run is: " + flag_a);
+//			//System.out.println("Execution Process kind -a   ...stage " + count);
+//			count_a++;
+//			if(count_a > 5)count_a = 1;
+//			
+//			object_class_a += - 2; 
+//			}
 // Затем, создаем object type Humman
 // И помещаем в lot_of_unit
 			
-		}
-		catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		}
+//		catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 	
 	}
 	
@@ -326,30 +326,30 @@ class Control implements Runnable {
 	
 }
 
-class Process_b implements Runnable{
-
-	@Override
-	public void run() {
-			
-		try {
-			while(Control.flag_b == true){
-				Thread.sleep(8000);
-				Basis.lbl2.setText("Execution Process kind -b   ...stage " + Control.count_b + " run is: " + Control.flag_b);
-				//First.lbl.setText("complete: " + Control.count_b + "%");
-				//System.out.println("Execution Process kind -b   ...stage " + Control.count_b);
-				Control.count_b++;
-				if(Control.count_b > 5)Control.count_b = 1;
-				Control.object_class_b += - 5;	
-			}
-			
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
-		}
-		
-	}
-	
-}
+//class Process_b implements Runnable{
+//
+//	@Override
+//	public void run() {
+//			
+//		try {
+//			while(Control.flag_b == true){
+//				Thread.sleep(8000);
+//				Basis.lbl2.setText("Execution Process kind -b   ...stage " + Control.count_b + " run is: " + Control.flag_b);
+//				//First.lbl.setText("complete: " + Control.count_b + "%");
+//				//System.out.println("Execution Process kind -b   ...stage " + Control.count_b);
+//				Control.count_b++;
+//				if(Control.count_b > 5)Control.count_b = 1;
+//				Control.object_class_b += - 5;	
+//			}
+//			
+//		} catch (InterruptedException e) {
+//			
+//			e.printStackTrace();
+//		}
+//		
+//	}
+//	
+//}
 
 
 class Fight implements Runnable{
