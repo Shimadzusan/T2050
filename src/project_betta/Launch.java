@@ -1,5 +1,7 @@
 package project_betta;
 
+import java.util.ArrayList;
+
 public class Launch {
 /*
  * We have big lot of the units, for example: shooter, plane, vehicle, plant and etc.
@@ -7,18 +9,19 @@ public class Launch {
  * which called Unit.
  * 
  * The structure of the our project have next view:
- * 				+-------------------+
- * 				|	abstract UNIT	|
- * 				+-------------------+
- * 				//		  ||		\\
- * 		+---------+	  +---------+  +---------+
- * 		| shooter |   | vehicle |  |  plant  |
- * 		+---------+	  +---------+  +---------+	
+ * 				+-------------------+								.
+ * 				|	abstract UNIT	|								.
+ * 				+-------------------+								.
+ * 				//		  ||		\\								.
+ * 		+---------+	  +---------+  +---------+						.
+ * 		| shooter |   | vehicle |  |  plant  |						.
+ * 		+---------+	  +---------+  +---------+						.
  * 
  * This was step one.
  * 	
  */
 	public static void main(String[] args) {
+//first version of realization 
 		Shooter shooter = new Shooter();
 			shooter.to_life();
 			
@@ -30,6 +33,21 @@ public class Launch {
 		
 		Plant plant = new Plant();
 			plant.to_life();
+			
+//=====================================================================
+//second version of realization
+	System.out.println();
+		ArrayList<Unit> list = new ArrayList<Unit>();
+		list.add(shooter);
+		list.add(vehicle);
+		list.add(plane);
+		list.add(plant);
+		
+		for(int i = 0; i < list.size(); i++) {
+			Unit unit = list.get(i);
+				System.out.print(unit.getClass() + " ");
+					unit.to_life();
+		}
 
 	}
 
