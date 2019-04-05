@@ -31,7 +31,6 @@ public class Basis extends JFrame {
 	 * Данный класс отвечает за формирование окна вывода основных параметров
 	 * Так как вывод основных параметров в консоль по техническим причинам не возможен
 	 * приходится пользоваться именно такой реализацией
-	 * Класс так же содержит метод main  и запускает класс с основной логикой(Control)
 	 */
 	
 	 static JPanel panel = new JPanel();
@@ -46,39 +45,34 @@ public class Basis extends JFrame {
 		 static  JLabel unit2 = new JLabel();
 		 static  JLabel unit3 = new JLabel();
 		 static  JLabel unit4 = new JLabel();
-		 static  JLabel label_fight = new JLabel();
-		 static int i = 0;    
+		 static  JLabel label_fight = new JLabel();  
 
-	public Basis(){
+	public Basis() {
         setTitle("# main frame of control #");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(550,350);
         setLocation(400,650);
         setVisible(true);
-    }
-
-    public static void main(String[] args) throws InterruptedException, IOException {
-    	Basis frame = new Basis();
-        
-	        panel.setBackground(Color.LIGHT_GRAY);
-	        panel.setLayout(null);
-	        frame.add(panel);
+ //==============================================================
+        panel.setBackground(Color.LIGHT_GRAY);
+        panel.setLayout(null);
+        this.add(panel);
 //расположение надписей с выводом основных параметров
-	        	lbl.setBounds(10, 25, 350, 40);
-	        	lbl2.setBounds(10, 45, 350, 40);
-	        	lbl3.setBounds(10, 5, 150, 40);
-	        	lbl4.setBounds(350, 5, 150, 40);
-	        	
-	        	lbl5.setBounds(350, 25, 350, 40);
-	        	lbl6.setBounds(350, 45, 350, 40);
-	        	
-	        	unit1.setBounds(10, 65, 350, 40);
-	        	unit2.setBounds(10, 85, 350, 40);
-	        	unit3.setBounds(10, 105, 350, 40);
-	        	unit4.setBounds(10, 125, 350, 40);
-	        	
-	        	label_fight.setBounds(10, 145, 250, 40);
-	        	
+        	lbl.setBounds(10, 25, 350, 40);
+        	lbl2.setBounds(10, 45, 350, 40);
+        	lbl3.setBounds(10, 5, 150, 40);
+        	lbl4.setBounds(350, 5, 150, 40);
+        	
+        	lbl5.setBounds(350, 25, 350, 40);
+        	lbl6.setBounds(350, 45, 350, 40);
+        	
+        	unit1.setBounds(10, 65, 350, 40);
+        	unit2.setBounds(10, 85, 350, 40);
+        	unit3.setBounds(10, 105, 350, 40);
+        	unit4.setBounds(10, 125, 350, 40);
+        	
+        	label_fight.setBounds(10, 145, 250, 40);
+        	
 	        	panel.add(lbl);
 	        	panel.add(lbl2);
 	        	panel.add(lbl3);
@@ -93,21 +87,10 @@ public class Basis extends JFrame {
 	        	panel.add(unit4);
 	        	
 	        	panel.add(label_fight);
-//===================================================
-	        		new Control();
     }
- 
 }
 
 class Control implements Runnable {
-	
-	static boolean flag_a = false;
-	static int count_a = 1;
-	static int object_class_a = 0;
-	
-	static boolean flag_b = false;
-	static int count_b = 1;
-	static int object_class_b = 0;
 	
 	static boolean flag_fight = false;
 	//static boolean switch_fight = false;
@@ -137,36 +120,17 @@ class Control implements Runnable {
 			System.out.println();//Интерфейс для командной строки
 			System.out.println("==========BLOCK OF CONTROL==========");
 			System.out.println("..availabel command: run; stop; exit");
-			System.out.println("..system status: object_class_a = " + object_class_a + "; object_class_b = " + object_class_b);
+			System.out.println();
 					
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 			command = bufferedReader.readLine(); //читаем строку с клавиатуры
 			
 		if(command.equals("exit"))break;
-		
-		if(command.equals("run -a")){
-			Thread t = new Thread(this);
-				t.start();
-					flag_a = true;
-		}	
-		if(command.equals("stop -a"))flag_a = false;
-//--------------------------B--------------------------
-//			
-//		if(command.equals("run -b")){
-//			Thread b = new Thread(new Process_b());
-//				b.start();
-//					flag_b = true;
-//		}
-//		if(command.equals("stop -b"))flag_b = false;
 //----------------thread system_status----------------------
-
-		if(command.equals("run -status")){
+		if(command.equals("run")){
 			Thread status = new Thread(new System_status());
 				status.start();
-				//flag_b = true;
-		}
-			
-//		if(s.equals("stop -status"));//flag_b = false;		
+		}	
 //------------------OPERATION WITH UNITS--------------------
 		if(command.equals("create -h")){
 			create_human();
@@ -177,14 +141,6 @@ class Control implements Runnable {
 			create_terminator();
 		}
 		if(command.equals("delete -t"))delete_terminator();
-//----------------------fight-------------------------------
-		
-//		if(command.equals("fight")){
-//			Thread fight = new Thread(new Fight());
-//				fight.start();
-//					flag_fight = true;
-//		}
-//		if(command.equals("stop fight"))flag_fight = false;
 //----------------------move-t-------------------------------
 
 		if(command.equals("move"))move();
@@ -193,30 +149,12 @@ class Control implements Runnable {
 			System.out.println("you command is: " + command);
 			System.out.println("================END=================");
 			
-			Basis.lbl5.setText("|===================================");
+			Basis.lbl5.setText("..empty");
 		}
 	}
 
 	@Override
 	public void run() {
-//		try {
-////...простой процесс класса А	
-//			while(flag_a == true){
-//			Thread.sleep(5000);
-//			Basis.lbl.setText("Execution Process kind -a   ...stage " + Control.count_a + " run is: " + flag_a);
-//			//System.out.println("Execution Process kind -a   ...stage " + count);
-//			count_a++;
-//			if(count_a > 5)count_a = 1;
-//			
-//			object_class_a += - 2; 
-//			}
-// Затем, создаем object type Humman
-// И помещаем в lot_of_unit
-			
-//		}
-//		catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 	
 	}
 	
@@ -322,35 +260,7 @@ class Control implements Runnable {
 	System.out.println("set new location is done..");
 	System.out.println("===================");
 	}
-
-	
 }
-
-//class Process_b implements Runnable{
-//
-//	@Override
-//	public void run() {
-//			
-//		try {
-//			while(Control.flag_b == true){
-//				Thread.sleep(8000);
-//				Basis.lbl2.setText("Execution Process kind -b   ...stage " + Control.count_b + " run is: " + Control.flag_b);
-//				//First.lbl.setText("complete: " + Control.count_b + "%");
-//				//System.out.println("Execution Process kind -b   ...stage " + Control.count_b);
-//				Control.count_b++;
-//				if(Control.count_b > 5)Control.count_b = 1;
-//				Control.object_class_b += - 5;	
-//			}
-//			
-//		} catch (InterruptedException e) {
-//			
-//			e.printStackTrace();
-//		}
-//		
-//	}
-//	
-//}
-
 
 class Fight implements Runnable{
 	
@@ -369,16 +279,6 @@ class Fight implements Runnable{
 				
 				//System.out.println("cycle of fight " + omega);
 				omega++;
-			
-				
-//		for(int i = 0; i < Control.lot_of_units.size(); i++) {
-//					
-//					unit_u = Control.lot_of_units.get(i);
-//						unit_u.life -= 1;
-//						
-//						Control.lot_of_units.set(i, unit_u);
-//			}			
-		
 			
 //===ЛОГИКА БОЯ===
 	ArrayList<Unit> list_human = new ArrayList<Unit>();
@@ -513,47 +413,6 @@ Basis.lbl6.setText("searh contact: contact_h = " + contact_h.size() + " contact_
 							m++;
 						}
 					}
-					
-
-
-	
-				
-				
-				
-				/*		
-				for(int m = 0; m < Control.lot_of_units.size(); m++) {
-					Control.lot_of_units.remove(m);
-				}
-				
-	for(int n = 0; n < contact_h.size(); n++) {
-		Control.lot_of_units.add(contact_h.get(n));
-	}
-	
-	for(int n = 0; n < contact_t.size(); n++) {
-		Control.lot_of_units.add(contact_t.get(n));
-	}
-	for(int n = 0; n < new_lot_units.size(); n++) {
-		Control.lot_of_units.add(new_lot_units.get(n));
-	}
-//END BATTLE MODUL
-	*/
-				
-//	Control.lot_of_units = new_lot_units + contact_t;
-				//First.lbl.setText("complete: " + Control.count_b + "%");
-				//System.out.println("Execution Process kind -b   ...stage " + Control.count_b);
-				
-//					for(int i = 0; i < Control.lot_of_units.size(); i++) {
-//						
-//					}
-//				for(int i = 0; i < Control.lot_of_units.size(); i++ ) {
-//					u = Control.lot_of_units.get(i);
-//						if(u.ideology.equals("human")) {
-//						u.life -= 5;
-//							Control.lot_of_units.set(i, u);
-//							break;
-//							//WE NEED BOOL VAR SWITCH
-//						}
-//				}
 							
 			}
 			
@@ -563,67 +422,51 @@ Basis.lbl6.setText("searh contact: contact_h = " + contact_h.size() + " contact_
 		}
 		
 	}
-//	ArrayList<Unit> add_list (ArrayList<Unit> first, ArrayList<Unit> second) {
-//		
-//		for(int i = 0; i < first.size(); i++) {
-//			first
-//		}
-//		
-//		return first;
-//	}
 	
 }
 
 class System_status implements Runnable{
-
 	/*
 	 * Класс основного процесса, предназначен для вывода всех данных
 	 * а так же здесь гнерируется системное время
 	 */
 	Unit unit_x = new Unit(0, 0, "",0);
 	Unit unit_z = new Unit(0, 0, "",0);
+	
 	@Override
 	public void run() {
-			int time = 1;
+		int time = 1;
 			
 		try {
 			while(true){
 				Thread.sleep(1000);
 				Basis.lbl4.setText("system_time: " + time + " s.");
-				//First.lbl.setText("complete: " + Control.count_b + "%");
-				//System.out.println("Execution Process kind -b   ...stage " + Control.count_b);
 				time++;
 				//! проверка всех систем, то есть раз в секунду
 				get_parametrs();
 				set_parametrs();
 //===FIGHT!!!			
-				run_fight();
-				
+				run_fight();	
 			}
 			
 		} catch (InterruptedException e) {
-			
 			e.printStackTrace();
 		}
-		
 	}
+	
 	void get_parametrs() {
 		
 		unit_x = Control.lot_of_units.get(0);
-//			System.out.println("Unit: " + x.kind + " life: " + x.life + " weapon: " + x.weapon);
-			
-			Basis.unit1.setText("Unit: " + unit_x.ideology + " life: " + unit_x.life + " weapon: " + unit_x.weapon + " location: " + unit_x.location);
+		Basis.unit1.setText("Unit: " + unit_x.ideology + " life: " + unit_x.life + " weapon: " + unit_x.weapon + " location: " + unit_x.location);
 		
-			unit_x = Control.lot_of_units.get(1);	
-			Basis.unit2.setText("Unit: " + unit_x.ideology + " life: " + unit_x.life + " weapon: " + unit_x.weapon + " location: " + unit_x.location);
+		unit_x = Control.lot_of_units.get(1);	
+		Basis.unit2.setText("Unit: " + unit_x.ideology + " life: " + unit_x.life + " weapon: " + unit_x.weapon + " location: " + unit_x.location);
 			
-			unit_x = Control.lot_of_units.get(2);	
-			Basis.unit3.setText("Unit: " + unit_x.ideology + " life: " + unit_x.life + " weapon: " + unit_x.weapon + " location: " + unit_x.location);
+		unit_x = Control.lot_of_units.get(2);	
+		Basis.unit3.setText("Unit: " + unit_x.ideology + " life: " + unit_x.life + " weapon: " + unit_x.weapon + " location: " + unit_x.location);
 			
-			unit_x = Control.lot_of_units.get(3);	
-			Basis.unit4.setText("Unit: " + unit_x.ideology + " life: " + unit_x.life + " weapon: " + unit_x.weapon + " location: " + unit_x.location);
-		
-		
+		unit_x = Control.lot_of_units.get(3);	
+		Basis.unit4.setText("Unit: " + unit_x.ideology + " life: " + unit_x.life + " weapon: " + unit_x.weapon + " location: " + unit_x.location);
 	}
 	
 	void set_parametrs() {
@@ -644,9 +487,6 @@ boolean flag = true;
 					 unit_z.location = 0;
 						Control.lot_of_units.set(i, unit_z);
 						flag = false;
-						//total_human = total_human - 1;
-					//	System.out.println(flag + "" + 0);
-					 
 				 }
 		}
 		
@@ -683,19 +523,6 @@ boolean flag = true;
 					t_dist = terminator_dist.get(k);
 						result[r] = h_dist - t_dist;
 						r++;
-						
-//						
-//							if(result <= 3 && result >= -3 && Control.flag_fight == false) {
-//								Control.flag_fight = true;
-//									Thread fight = new Thread(new Fight());
-//										fight.start();
-//System.out.println("in first" + result);
-////								Control.switch_fight = true;
-//							}
-//							if((result >= 4 || result <= -4) && Control.flag_fight == true) {
-//System.out.println("in second" + result);
-//								Control.flag_fight = false;
-//							}
 				}
 			}
 
