@@ -90,178 +90,6 @@ public class Basis extends JFrame {
     }
 }
 
-class Control implements Runnable {
-	
-	static boolean flag_fight = false;
-	//static boolean switch_fight = false;
-//эта группа юнитов предназначена для ... операций	
-		Unit unit_x = new Unit(0,0,"",0);
-		Unit unit_z = new Unit(0,0,"",0);
-		
-	static ArrayList<Unit> lot_of_units = new ArrayList<Unit>();
-//=====================================================
-//BLOCK OF MY CONTROL
-	Control() throws InterruptedException, IOException {
-//...формируем список юнитов
-		Unit u1 = new Unit(60,10,"human",0);
-		Unit u2 = new Unit(80,20,"terminator",50);
-		Unit u3 = new Unit(50,10,"human",10);
-		Unit u4 = new Unit(90,15,"terminator",40);
-		
-		lot_of_units.add(u1);
-		lot_of_units.add(u2);
-		lot_of_units.add(u3);
-		lot_of_units.add(u4);
-
-		String command = "";
-		
-	while(true){
-
-			System.out.println();//Интерфейс для командной строки
-			System.out.println("==========BLOCK OF CONTROL==========");
-			System.out.println("..availabel command: run; stop; exit");
-			System.out.println();
-					
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-			command = bufferedReader.readLine(); //читаем строку с клавиатуры
-			
-		if(command.equals("exit"))break;
-//----------------thread system_status----------------------
-		if(command.equals("run")){
-			Thread status = new Thread(new System_status());
-				status.start();
-		}	
-//------------------OPERATION WITH UNITS--------------------
-		if(command.equals("create -h")){
-			create_human();
-		}
-		if(command.equals("delete -h"))delete_human();
-		
-		if(command.equals("create -t")){
-			create_terminator();
-		}
-		if(command.equals("delete -t"))delete_terminator();
-//----------------------move-t-------------------------------
-
-		if(command.equals("move"))move();
-		
-//----------------------------------------------------------
-			System.out.println("you command is: " + command);
-			System.out.println("================END=================");
-			
-			Basis.lbl5.setText("..empty");
-		}
-	}
-
-	@Override
-	public void run() {
-	
-	}
-	
-	private void create_human() {
-		boolean flag = true;
-			
-			for(int i = 0; i < lot_of_units.size(); i++){
-				 unit_x = lot_of_units.get(i);
-
-				 if(!unit_x.ideology.equals("human") && !unit_x.ideology.equals("terminator") && flag == true){
-					 unit_z = unit_x;
-					 	unit_z.ideology = "human";
-					 		unit_z.life = 50;
-					 			unit_z.weapon = 10;
-					 				unit_z.location = 10;
-					 					lot_of_units.set(i, unit_z);
-					 						flag = false;
-				 }
-			 }			
-	}
-
-	private void delete_human() {
-		boolean flag = true;
-			
-			for(int i = 0; i < lot_of_units.size(); i++){
-				unit_x = (Unit) lot_of_units.get(i);
-				 
-				 if(unit_x.ideology.equals("human") && flag ==true){
-					 unit_z = unit_x;
-					 	unit_z.ideology = "";
-					 		unit_z.life = 0;
-					 			unit_z.weapon = 0;
-					 				unit_z.location = 0;
-					 					lot_of_units.set(i, unit_z);
-					 						flag = false;
-				 }
-			}
-	}
-
-
-	private void create_terminator() {
-		boolean flag = true;
-			
-			for(int i = 0; i < lot_of_units.size(); i++){
-				 unit_x = lot_of_units.get(i);
-
-				 if(!unit_x.ideology.equals("human") && !unit_x.ideology.equals("terminator") && flag == true){
-					 unit_z = unit_x;
-					 	unit_z.ideology = "terminator";
-					 		unit_z.life = 100;
-					 			unit_z.weapon = 20;
-					 				unit_z.location = 90;
-					 					lot_of_units.set(i, unit_z);
-					 						flag = false;
-				 }
-			 }			
-	}
-
-	private void delete_terminator() {
-		boolean flag = true;
-			
-			for(int i = 0; i < lot_of_units.size(); i++){
-				unit_x = (Unit) lot_of_units.get(i);
-				 
-				 if(unit_x.ideology.equals("terminator") && flag ==true){
-					 unit_z = unit_x;
-					 	unit_z.ideology = "";
-					 		unit_z.life = 0;
-					 			unit_z.weapon = 0;
-					 				unit_z.location = 0;
-					 					lot_of_units.set(i, unit_z);
-					 						flag = false;
-				 }
-			}
-	}
-	
-	private void move() throws IOException {
-
-		String unit = "";		
-		int number_unit = 0;
-		int new_location = 0;
-		
-			System.out.println("=====MODE MOVE=====");	
-			System.out.print("..chose the unit: ");
-				BufferedReader buffer_one = new BufferedReader(new InputStreamReader(System.in));
-					unit = buffer_one.readLine(); //читаем строку с клавиатуры
-						number_unit = Integer.parseInt(unit);
-						
-			System.out.print("..set new location: ");
-				BufferedReader buffer_two = new BufferedReader(new InputStreamReader(System.in));
-					unit = buffer_two.readLine();
-						new_location = Integer.parseInt(unit);
-						
-	System.out.println();
-	System.out.println("unit: " + number_unit + " location: " + new_location);
-	
-	
-//-----------------------------------------------------------------------------------------------
-		unit_x = (Unit) lot_of_units.get(number_unit);
-			unit_x.location = new_location;
-				lot_of_units.set(number_unit, unit_x);
-				
-	System.out.println("set new location is done..");
-	System.out.println("===================");
-	}
-}
-
 class Fight implements Runnable{
 	
 	Unit unit_u = new Unit(0, 0, "",0);
@@ -270,33 +98,30 @@ class Fight implements Runnable{
 	@Override
 	public void run() {
 		int omega = 1;
+		
+		
 			System.out.println("fight");
+			
 		try {
 			while(Control.flag_fight == true){
 				Thread.sleep(3000);//MUST TO END REPLACE!
 				Basis.label_fight.setText("fight   ...state " + Control.flag_fight);
 				Basis.lbl.setText("..cycle of fight   ...stage " + omega);
-				
-				//System.out.println("cycle of fight " + omega);
-				omega++;
-			
+				omega++;		
 //===ЛОГИКА БОЯ===
-	ArrayList<Unit> list_human = new ArrayList<Unit>();
-	ArrayList<Unit> list_terminator = new ArrayList<Unit>();
-	ArrayList<Unit> new_lot_units = new ArrayList<Unit>();
-	ArrayList<Unit> empty = new ArrayList<Unit>();
+				ArrayList<Unit> list_human = new ArrayList<Unit>();
+				ArrayList<Unit> list_terminator = new ArrayList<Unit>();
+				ArrayList<Unit> new_lot_units = new ArrayList<Unit>();
+				ArrayList<Unit> empty = new ArrayList<Unit>();
 	
 	for(int i = 0; i < Control.lot_of_units.size(); i++) {
-		
+//..сортируем все юниты по классам
 			unit_u = Control.lot_of_units.get(i);
 				if(unit_u.ideology.equals("human"))list_human.add(unit_u);
 				if(unit_u.ideology.equals("terminator"))list_terminator.add(unit_u);
 				if(!unit_u.ideology.equals("terminator") && !unit_u.ideology.equals("human"))empty.add(unit_u);
 	}
-	
 	Basis.lbl2.setText("human " + list_human.size() + " terminator " + list_terminator.size() + " other " + empty.size());
-	
-	
 	
 //===SEARCH CONTACT!! список законтаченных юнитов
 				
@@ -318,16 +143,11 @@ class Fight implements Runnable{
 										contact_h.add(unit_v);
 										break;
 									}
-//При итерации добавляются лишние юниты, в обоих вариантах!!
-//									
-//									else {
-//										new_lot_units.add(unit_u);
-//									}
-					}
-					if(result > 3 || result < -3) {
-						new_lot_units.add(unit_v);
 					}
 					
+					if(result > 3 || result < -3) {
+						new_lot_units.add(unit_v);
+					}	
 		}
 		
 		for(int j = 0; j < list_terminator.size(); j++) {
@@ -344,9 +164,6 @@ class Fight implements Runnable{
 										contact_t.add(unit_v);
 										break;
 									}
-//									else {
-//										new_lot_units.add(unit_u);
-//									}
 					}
 					
 					if(result > 3 || result < -3) {
@@ -354,8 +171,7 @@ class Fight implements Runnable{
 					}
 		}
 Basis.lbl6.setText("searh contact: contact_h = " + contact_h.size() + " contact_t = " + contact_t.size() + " contact_zero = " + new_lot_units.size());
-//=========================
-		
+//=========================БОЙ===
 		
 		int total_weapon_power_t = 20 * contact_t.size();
 		int total_weapon_power_h = 10 * contact_h.size();
@@ -402,8 +218,6 @@ Basis.lbl6.setText("searh contact: contact_h = " + contact_h.size() + " contact_
 							m++;
 						}
 					}
-					
-
 //----------------------------------------------------------4
 					
 					if(empty.size() > 0){
@@ -413,16 +227,15 @@ Basis.lbl6.setText("searh contact: contact_h = " + contact_h.size() + " contact_
 							m++;
 						}
 					}
-							
-			}
-			
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
-		}
-		
+//					if(contact_h.size() == 0 || contact_t.size() == 0) {
+//						Control.flag_fight = false;
+//					}
+		}	
 	}
-	
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}	
+	}
 }
 
 class System_status implements Runnable{
@@ -455,7 +268,7 @@ class System_status implements Runnable{
 	}
 	
 	void get_parametrs() {
-		
+//..вывод параметров в наш фрейм
 		unit_x = Control.lot_of_units.get(0);
 		Basis.unit1.setText("Unit: " + unit_x.ideology + " life: " + unit_x.life + " weapon: " + unit_x.weapon + " location: " + unit_x.location);
 		
@@ -470,16 +283,13 @@ class System_status implements Runnable{
 	}
 	
 	void set_parametrs() {
-		
+//..метод для обнуления юнитов с отрицательным life		
 		for(int i = 0; i < Control.lot_of_units.size(); i++) {
 		unit_x = Control.lot_of_units.get(i);
-	
-//		System.out.println("Unit: " + x.kind + " life: " + x.life + " weapon: " + x.weapon);
-		if(unit_x.life <= 0){
-
-boolean flag = true;
+			if(unit_x.life <= 0) {
+				boolean flag = true;
 			
-						if(unit_x.ideology.equals("human") || unit_x.ideology.equals("terminator") && flag ==true){
+				if(unit_x.ideology.equals("human") || unit_x.ideology.equals("terminator") && flag ==true){
 					 unit_z = unit_x;
 					 unit_z.ideology = "";
 					 unit_z.life = 0;
@@ -487,9 +297,8 @@ boolean flag = true;
 					 unit_z.location = 0;
 						Control.lot_of_units.set(i, unit_z);
 						flag = false;
-				 }
-		}
-		
+				}
+			}
 		}		
 	}
 	
