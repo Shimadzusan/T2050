@@ -90,7 +90,7 @@ public class Basis extends JFrame {
     }
 }
 
-class Fight implements Runnable{
+class Fight extends Thread implements Runnable{
 	
 	Unit unit_u = new Unit(0, 0, "",0);
 	Unit unit_v = new Unit(0, 0, "",0);
@@ -103,11 +103,17 @@ class Fight implements Runnable{
 			System.out.println("fight");
 			
 		try {
+			
+			while(true) {
+				Thread.sleep(3000);//MUST TO END REPLACE!
+				Basis.lbl.setText("..cycle of fight   ...stage " + omega);
+				omega++;
+				
 			while(Control.flag_fight == true){
 				Thread.sleep(3000);//MUST TO END REPLACE!
 				Basis.label_fight.setText("fight   ...state " + Control.flag_fight);
-				Basis.lbl.setText("..cycle of fight   ...stage " + omega);
-				omega++;		
+				
+						
 //===ЛОГИКА БОЯ===
 				ArrayList<Unit> list_human = new ArrayList<Unit>();
 				ArrayList<Unit> list_terminator = new ArrayList<Unit>();
@@ -188,49 +194,11 @@ Basis.lbl6.setText("searh contact: contact_h = " + contact_h.size() + " contact_
 				contact_t.set(0, unit_u);
 		}
 //ФОРМИРУЕМ КОНЕЧНЫЙ РЕЗУЛЬТАТ ИЗ ТРЕХ МАССИВОВ
-				
-				int m = 0;
-					
-					if(contact_h.size() > 0){
-						
-						for(int p = 0; p < contact_h.size(); p++) {
-							Control.lot_of_units.set(p, contact_h.get(p));
-							m++;
-						}
-						
-					}
-//----------------------------------------------------------2
-					
-					if(contact_t.size() > 0){
-						
-						for(int p = 0; p < contact_t.size(); p++) {
-							Control.lot_of_units.set(m, contact_t.get(p));
-							m++;
-						}
-					}
-
-//----------------------------------------------------------3
-					
-					if(new_lot_units.size() > 0){
-						
-						for(int p = 0; p < new_lot_units.size(); p++) {
-							Control.lot_of_units.set(m, new_lot_units.get(p));
-							m++;
-						}
-					}
-//----------------------------------------------------------4
-					
-					if(empty.size() > 0){
-						
-						for(int p = 0; p < empty.size(); p++) {
-							Control.lot_of_units.set(m, empty.get(p));
-							m++;
-						}
-					}
-//					if(contact_h.size() == 0 || contact_t.size() == 0) {
-//						Control.flag_fight = false;
-//					}
-		}	
+		//???
+	
+		}
+			
+		}
 	}
 		catch (InterruptedException e) {
 			e.printStackTrace();
@@ -258,8 +226,6 @@ class System_status implements Runnable{
 				//! проверка всех систем, то есть раз в секунду
 				get_parametrs();
 				set_parametrs();
-//===FIGHT!!!			
-				run_fight();	
 			}
 			
 		} catch (InterruptedException e) {
@@ -289,8 +255,9 @@ class System_status implements Runnable{
 			if(unit_x.life <= 0) {
 				boolean flag = true;
 			
-				if(unit_x.ideology.equals("human") || unit_x.ideology.equals("terminator") && flag ==true){
-					 unit_z = unit_x;
+				if((unit_x.ideology.equals("human") || unit_x.ideology.equals("terminator")) && flag ==true){
+					System.out.println("blam"); 
+					unit_z = unit_x;
 					 unit_z.ideology = "";
 					 unit_z.life = 0;
 					 unit_z.weapon = 0;
@@ -301,60 +268,4 @@ class System_status implements Runnable{
 			}
 		}		
 	}
-	
-	void run_fight() {
-		/*
-		 * Основа для запуска боя, это локация юнитов
-		 * если достигается некоторое критическое значение, то запускается процесс боя
-		 * battle_flag = true
-		 */
-		ArrayList<Integer> human_dist = new ArrayList<Integer>();
-		ArrayList<Integer> terminator_dist = new ArrayList<Integer>();
-		
-		for(int i =0; i < Control.lot_of_units.size(); i++) {
-			unit_x = Control.lot_of_units.get(i);
-				if(unit_x.ideology.equals("human"))human_dist.add(unit_x.location);
-				if(unit_x.ideology.equals("terminator"))terminator_dist.add(unit_x.location);
-				
-		}
-		
-	if(human_dist.size() > 0 && terminator_dist.size() > 0) {
-		int h_dist = 0;
-		int t_dist = 0;
-		int[] result = new int[human_dist.size() * terminator_dist.size()];
-		boolean contact = false;
-		int r = 0;
-		
-			for(int i =0; i < human_dist.size(); i++) {
-				h_dist = human_dist.get(i);
-				
-				for(int k = 0; k < terminator_dist.size(); k++) {
-					t_dist = terminator_dist.get(k);
-						result[r] = h_dist - t_dist;
-						r++;
-				}
-			}
-
-			for(int i = 0; i < result.length; i++) {
-				//System.out.println(result[i] + " " + i);
-				if(result[i] <= 3 && result[i] >= -3) {
-					
-					contact = true;}
-			}
-			
-			if(contact ==true && Control.flag_fight == false) {
-				Control.flag_fight = true;
-					Thread fight = new Thread(new Fight());
-						fight.start();
-//System.out.println("in first" + result);
-//				Control.switch_fight = true;
-			}
-			if(contact == false && Control.flag_fight == true) {
-//System.out.println("in second" + result);
-				Control.flag_fight = false;
-			}
-	}
-		
-	}
-	
-	}
+}

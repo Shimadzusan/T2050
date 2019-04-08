@@ -18,10 +18,12 @@ class Control {
 //BLOCK OF MY CONTROL
 	Control() throws InterruptedException, IOException {
 //...формируем список юнитов
-		Unit u1 = new Unit(60,10,"human",0);
-		Unit u2 = new Unit(80,20,"terminator",50);
-		Unit u3 = new Unit(50,10,"human",10);
-		Unit u4 = new Unit(90,15,"terminator",40);
+//		Unit u1 = new Unit(60,10,"human",49);
+//		Unit u2 = new Unit(80,20,"terminator",50);
+		Unit u1 = new Unit(0,0,"",0);
+		Unit u2 = new Unit(0,0,"",0);
+		Unit u3 = new Unit(0,0,"",0);
+		Unit u4 = new Unit(0,0,"",0);
 		
 		lot_of_units.add(u1);
 		lot_of_units.add(u2);
@@ -29,6 +31,8 @@ class Control {
 		lot_of_units.add(u4);
 
 		String command = "";
+		Fight fight = new Fight();
+		fight.start();
 		
 	while(true){
 
@@ -61,6 +65,10 @@ class Control {
 		if(command.equals("move"))move();
 		
 //----------------------------------------------------------
+		if(command.equals("start fight"))Control.flag_fight = true;
+		if(command.equals("end fight"))Control.flag_fight = false;
+		
+		
 			System.out.println("you command is: " + command);
 			System.out.println("================END=================");
 			
